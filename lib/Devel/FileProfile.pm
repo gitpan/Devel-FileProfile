@@ -12,7 +12,7 @@ my %hits;
 my $hits = 0;
 my $done = 0;
 
-our $VERSION = 0.21;
+our $VERSION = 0.22;
 
 sub start
 {
@@ -37,8 +37,10 @@ sub import
 sub ticktock
 {
 	my $i = 0;
+	my %done;
 	while(my ($pkg, $file, $line) = caller($i++)) {
 		next unless $files{$file};
+		next if $done{$file}{$line}++; # don't overcount recursion
 		$hits{$file}{$line}++;
 	}
 	$hits++;
